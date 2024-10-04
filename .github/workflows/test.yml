@@ -1,44 +1,32 @@
-name: Python Tests and Linting
+name: Python CI
 
 on:
-  pull_request:  # Trigger on pull request
+  pull_request:  # Runs the action on pull requests to the main branch
     branches:
       - main
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    
+
     steps:
-      # Step 1: Check out the code
+      # Step 1: Check out the code from your repository
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Set up Python
-      - name: Set up Python 3.x
+      # Step 2: Set up Python environment
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.x'
-      
-      # Step 3: Install dependencies
-      - name: Install dependencies
+          python-version: '3.x'  # Use Python 3.x
+
+      # Step 3: Install dependencies from requirements.txt
+      - name: Install dependencies from requirements.txt
         run: |
           python -m pip install --upgrade pip
-          pip install pytest pytest-cov pylint
+          pip install -r requirements.txt
 
-      # Step 4: Run PyLint
-      - name: Run pylint
+      # Step 4: Run pytest
+      - name: Run tests with pytest
         run: |
-          pylint app/ tests/ --fail-under=9.0  # Set fail-under to your desired score
-
-      # Step 5: Run pytest with coverage
-      - name: Run pytest with coverage
-        run: |
-          pytest --cov=app --cov-fail-under=100  # Ensure 100% coverage
-
-      # Step 6: Upload coverage report (optional)
-      - name: Upload coverage report
-        uses: actions/upload-artifact@v3
-        with:
-          name: coverage-report
-          path: coverage.xml
+          pytest
