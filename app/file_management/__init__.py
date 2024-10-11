@@ -1,9 +1,9 @@
 import os
 import pytest
-from pyfakefs.fake_filesystem_unittest import Patcher
+from pyfakefs.fake_filesystem_unittest import Patcher # type: ignore
 import logging
 
-from app.file_manager import FileManager
+from app.file_manager import FileManager # type: ignore
 
 # Test Cases
 @pytest.fixture
