@@ -14,7 +14,7 @@ def test_perform_operation():
     mock_operation.compute.return_value = 15  # Set compute return value
     
     # Create an instance of the Calculator
-    calculator = Calculator()
+    calculator = calculator()
 
     # Perform the operation and assert the result
     result = calculator.perform_operation(mock_operation)
@@ -38,7 +38,7 @@ def test_get_history():
     mock_operation_2.compute.return_value = 20
 
     # Create an instance of the Calculator
-    calculator = Calculator()
+    calculator = calculator()
 
     # Perform two operations
     calculator.perform_operation(mock_operation_1)

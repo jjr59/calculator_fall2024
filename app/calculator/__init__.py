@@ -1,53 +1,56 @@
-import pytest
-from app.calculation import Addition, Subtraction, Multiplication, Division  # Assuming your classes are in 'calculation' module
+from typing import List, Union
+from app.calculation import Calculation
+from app.history_manager import HistoryManager, OperationCommand
+from app.operations import Number
 
-# Parameterized test for Addition with __str__ and __repr__ checks
-@pytest.mark.parametrize("a, b, expected", [
-    (1, 1, 2), (2, 3, 5), (-1, -1, -2), (0, 0, 0)
-])
-def test_addition(a, b, expected):
-    '''Test for addition operation'''
-    operation = Addition.create(a, b)
-    assert operation.compute() == expected
-    assert str(operation) == f"Addition: {a} + {b} = {expected}"
-    assert repr(operation) == f"Addition(a={a}, b={b}, result={expected})"
 
-# Parameterized test for Subtraction with __str__ and __repr__ checks
-@pytest.mark.parametrize("a, b, expected", [
-    (1, 1, 0), (5, 3, 2), (-1, -1, 0), (0, 5, -5)
-])
-def test_subtraction(a, b, expected):
-    '''Test for subtraction operation'''
-    operation = Subtraction.create(a, b)
-    assert operation.compute() == expected
-    assert str(operation) == f"Subtraction: {a} - {b} = {expected}"
-    assert repr(operation) == f"Subtraction(a={a}, b={b}, result={expected})"
+class Calculator:
+    """
+    The Calculator class ties together operations and their history.
+    
+    This class allows performing operations, managing the operation history, and undoing actions.
 
-# Parameterized test for Multiplication with __str__ and __repr__ checks
-@pytest.mark.parametrize("a, b, expected", [
-    (2, 2, 4), (3, 5, 15), (0, 5, 0), (-1, 1, -1)
-])
-def test_multiplication(a, b, expected):
-    '''Test for multiplication operation'''
-    operation = Multiplication.create(a, b)
-    assert operation.compute() == expected
-    assert str(operation) == f"Multiplication: {a} * {b} = {expected}"
-    assert repr(operation) == f"Multiplication(a={a}, b={b}, result={expected})"
+    Attributes:
+    history_manager (HistoryManager): Manages the history of operations.
+    """
 
-# Parameterized test for Division with __str__ and __repr__ checks
-@pytest.mark.parametrize("a, b, expected", [
-    (2, 2, 1), (10, 5, 2), (9, 3, 3), (7, 2, 3.5)
-])
-def test_division(a, b, expected):
-    '''Test for division operation'''
-    operation = Division.create(a, b)
-    assert operation.compute() == expected
-    assert str(operation) == f"Division: {a} / {b} = {expected}"
-    assert repr(operation) == f"Division(a={a}, b={b}, result={expected})"
+    def __init__(self) -> None:
+        """Initializes the Calculator with a history manager."""
+        self.history_manager = HistoryManager()
 
-# Test for division by zero exception
-def test_division_by_zero_exception():
-    '''Test for division by zero exception'''
-    operation = Division.create(10, 0)
-    with pytest.raises(ZeroDivisionError):
-        operation.compute()
+    def perform_operation(self, operation: 'Calculation') -> Number:
+        """
+        Perform the calculation and store it in history.
+
+        Args:
+        operation (Calculation): The calculation to perform.
+
+        Returns:
+        Number: The result of the calculation.
+        """
+        command = OperationCommand(operation)
+        result = command.execute()
+        self.history_manager.add_to_history(command)
+        return result
+
+    def get_history(self) -> List['OperationCommand']:
+        """
+        Get the full history of performed operations.
+
+        Returns:
+        List[OperationCommand]: The list of all performed operations.
+        """
+        return self.history_manager.get_full_history()
+
+    def undo(self) -> Union['OperationCommand', None]:
+        """
+        Undo the last operation.
+
+        Returns:
+        Union[OperationCommand, None]: The last operation that was undone, or None if history is empty.
+        """
+        return self.history_manager.undo_last()
+
+    def clear_history(self) -> None:
+        """Clear the entire calculator history."""
+        self.history_manager.clear_history()
