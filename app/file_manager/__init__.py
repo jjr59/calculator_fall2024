@@ -73,3 +73,4 @@ class FileManager:
         except OSError as e:
             logging.error(f"Failed to delete file '{self.filename}'. Error: {e}")
             raise
+        

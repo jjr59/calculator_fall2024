@@ -114,3 +114,4 @@ def test_clear_history():
     # Check that the history is empty
     history = calculator.get_history()
     assert len(history) == 0
+    

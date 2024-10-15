@@ -51,3 +51,4 @@ def test_division_by_zero_exception():
     operation = Division.create(10, 0)
     with pytest.raises(ZeroDivisionError):
         operation.compute()
+        

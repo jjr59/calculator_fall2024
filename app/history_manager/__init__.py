@@ -70,3 +70,4 @@ class HistoryManager:
         if self._history:
             return self._history.pop()
         return None
+    

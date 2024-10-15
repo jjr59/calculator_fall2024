@@ -54,3 +54,4 @@ class Calculator:
     def clear_history(self) -> None:
         """Clear the entire calculator history."""
         self.history_manager.clear_history()
+        

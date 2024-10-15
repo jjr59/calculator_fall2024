@@ -145,3 +145,4 @@ class Division(Calculation):
         result = self.compute()
         formatted_result = int(result) if result.is_integer() else result
         return f"Division(a={self.a}, b={self.b}, result={formatted_result})"
+    
