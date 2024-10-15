@@ -3,7 +3,7 @@ import pytest
 from pyfakefs.fake_filesystem_unittest import Patcher
 import logging
 
-from app.file_management import FileManager
+from app.file_manager import FileManager
 
 # Test Cases
 @pytest.fixture
@@ -12,7 +12,7 @@ def fs():
     with Patcher() as patcher:
         yield patcher
 
-def test_write_file_positive(fs: Patcher, caplog: pytest.LogCaptureFixture):
+def test_write_file_positive(fs, caplog):
     """Test writing to a file successfully."""
     file_manager = FileManager("test_file.txt")
     
@@ -30,7 +30,7 @@ def test_write_file_positive(fs: Patcher, caplog: pytest.LogCaptureFixture):
     # Check logging without quotes around the filename
     assert "Successfully wrote to file: test_file.txt" in caplog.text
 
-def test_read_file_positive(fs: Patcher, caplog: pytest.LogCaptureFixture):
+def test_read_file_positive(fs, caplog):
     """Test reading from a file successfully after writing."""
     fs.fs.create_file("test_file.txt", contents="Hello, World!")
 
@@ -44,7 +44,7 @@ def test_read_file_positive(fs: Patcher, caplog: pytest.LogCaptureFixture):
     # Check logging without quotes around the filename
     assert "Successfully read from file: test_file.txt" in caplog.text
 
-def test_delete_file_positive(fs: Patcher, caplog: pytest.LogCaptureFixture):
+def test_delete_file_positive(fs, caplog):
     """Test deleting a file successfully."""
     fs.fs.create_file("test_file.txt", contents="Hello, World!")
 
@@ -58,7 +58,7 @@ def test_delete_file_positive(fs: Patcher, caplog: pytest.LogCaptureFixture):
     # Check logging without quotes around the filename
     assert "Successfully deleted file: test_file.txt" in caplog.text
 
-def test_read_file_negative(fs: Patcher, caplog: pytest.LogCaptureFixture):
+def test_read_file_negative(fs, caplog):
     """Test reading from a non-existent file."""
     file_manager = FileManager("non_existent_file.txt")
 
@@ -69,7 +69,7 @@ def test_read_file_negative(fs: Patcher, caplog: pytest.LogCaptureFixture):
     # Check logging without quotes around the filename
     assert "File not found: non_existent_file.txt" in caplog.text
 
-def test_delete_file_negative(fs: Patcher, caplog: pytest.LogCaptureFixture):
+def test_delete_file_negative(fs, caplog):
     """Test deleting a non-existent file."""
     file_manager = FileManager("non_existent_file.txt")
 
