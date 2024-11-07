@@ -1,4 +1,5 @@
 import pytest
+import pandas as pd
 from unittest.mock import Mock
 from app.calculation import Calculation
 from app.calculator import Calculator

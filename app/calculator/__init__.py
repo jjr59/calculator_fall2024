@@ -3,6 +3,8 @@ from app.calculation import Calculation
 from app.history_manager import HistoryManager, OperationCommand
 from app.operations import Number
 
+import pandas as pd
+
 
 class Calculator:
     """
